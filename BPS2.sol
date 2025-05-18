@@ -33,6 +33,7 @@ contract code{
         string _TransactionStatus;
         uint _NumberOfTransactionSuccesses;
         uint _NumberOfTransactionFailures;
+        uint _TimeOfTransaction;
     }
 
     mapping(address => TokenInfo) public TokenPurchaseInfo;
@@ -48,7 +49,7 @@ contract code{
             TokensPurchased[msg.sender] += TokensOrdered[msg.sender];
             TransactionStatusSuccess[msg.sender] += 1;
             TransactionStatusFailure[msg.sender] += 0;
-            TokenPurchaseInfo[msg.sender] = TokenInfo(TokensPurchased[msg.sender], TokensOrdered[msg.sender], "Success", TransactionStatusSuccess[msg.sender], TransactionStatusFailure[msg.sender]);
+            TokenPurchaseInfo[msg.sender] = TokenInfo(TokensPurchased[msg.sender], TokensOrdered[msg.sender], "Success", TransactionStatusSuccess[msg.sender], TransactionStatusFailure[msg.sender], block.timestamp);
             payable(ContractAdmin).call{value: PurchasePrice[msg.sender]}("");
             if(TemporaryValue[msg.sender] > TotalCapital - TemporaryValue[msg.sender]){
                 LeadInvestor = _LeadInvestor(TemporaryValue[msg.sender], msg.sender);
@@ -58,7 +59,7 @@ contract code{
             TokensOrdered[msg.sender] += 0;
             TransactionStatusSuccess[msg.sender] += 0;
             TransactionStatusFailure[msg.sender] += 1;
-            TokenPurchaseInfo[msg.sender] = TokenInfo(TokensPurchased[msg.sender], TokensOrdered[msg.sender], "Failure", TransactionStatusSuccess[msg.sender], TransactionStatusFailure[msg.sender]);
+            TokenPurchaseInfo[msg.sender] = TokenInfo(TokensPurchased[msg.sender], TokensOrdered[msg.sender], "Failure", TransactionStatusSuccess[msg.sender], TransactionStatusFailure[msg.sender], block.timestamp);
             payable(msg.sender).call{value: TemporaryValue[msg.sender]}("");
         }
     }
